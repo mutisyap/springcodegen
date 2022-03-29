@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!--
+        Added the entity OneTimePin.
+    -->
+    <changeSet id="<%= changeLogId %>" author="user">
+        <createTable tableName="tbl_<%= entityAPI %>s">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <!-- Add your other fields here -->
+
+            <column name="created_on" type="varchar(25)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="varchar(25)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_updated_on" type="varchar(25)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_updated_by" type="varchar(25)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

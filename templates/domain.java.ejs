@@ -1,0 +1,24 @@
+package <%= package %>.domain;
+
+import lombok.Data;
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Data
+@Table(name = "tbl_<%= entityAPI %>s")
+public class <%= entity %> implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String createdOn;
+
+    private String createdBy;
+
+    private String lastUpdatedOn;
+
+    private String lastUpdatedBy;
+
+}

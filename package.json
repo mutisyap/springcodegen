@@ -1,0 +1,16 @@
+{
+  "name": "learnejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "fs-extra": "^10.0.1",
+    "yargs-parser": "^21.0.1"
+  }
+}

@@ -1,0 +1,94 @@
+package <%= package %>.web.rest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import <%= package %>.domain.<%= entity %>;
+import <%= package %>.service.<%= entity %>Service;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * REST controller for managing {@link <%= package %>.domain.<%= entity %>}.
+ */
+@RestController
+@RequestMapping("/api")
+public class <%= entity %>Resource {
+
+    private final Logger log = LoggerFactory.getLogger(<%= entity %>Resource.class);
+     
+    private final <%= entity %>Service <%= objectName %>Service;
+
+    public <%= entity %>Resource(<%= entity %>Service <%= objectName %>Service) {
+        this.<%= objectName %>Service = <%= objectName %>Service;
+    }
+
+    @PostMapping("/<%= entityAPI %>s")
+    public ResponseEntity<<%= entity %>> create<%= entity %>(@Valid @RequestBody <%= entity %> <%= objectName %>)
+            throws URISyntaxException {
+        log.debug("REST request to save <%= objectName %> : {}", <%= objectName %>);
+
+        <%= entity %> result = <%= objectName %>Service.save(<%= objectName %>);
+        return ResponseEntity
+                .created(new URI("/api/<%= entityAPI %>s/" + result.getId()))
+                .body(result);
+    }
+
+    @PutMapping("/<%= entityAPI %>s/{id}")
+    public ResponseEntity<<%= entity %>> update<%= entity %>(
+            @PathVariable(value = "id", required = false) final Long id,
+            @Valid @RequestBody <%= entity %> <%= objectName %>
+    ) throws URISyntaxException {
+        log.debug("REST request to update <%= objectName %> : {}, {}", id, <%= objectName %>);
+
+        <%= entity %> result = <%= objectName %>Service.save(<%= objectName %>);
+        return ResponseEntity
+                .ok()
+                .body(result);
+    }
+
+    /**
+     * {@code GET  /<%= entityAPI %>s} : get all the <%= objectName %>.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= objectName %> in body.
+     */
+    @GetMapping("/<%= entityAPI %>s")
+    public List<<%= entity %>> getAll<%= entity %>s() {
+        log.debug("REST request to get all <%= entity %>s");
+        return <%= objectName %>Service.findAll();
+    }
+
+    /**
+     * {@code GET  /<%= entityAPI %>s/:id} : get the "id" <%= objectName %>.
+     *
+     * @param id the id of the <%= objectName %> to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= objectName %>, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/<%= entityAPI %>s/{id}")
+    public ResponseEntity<<%= entity %>> get<%= entity %>(@PathVariable Long id) {
+        log.debug("REST request to get <%= objectName %> : {}", id);
+        Optional<<%= entity %>> <%= objectName %>Optional = <%= objectName %>Service.findOne(id);
+        return <%= objectName %>Optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    /**
+     * {@code DELETE  /<%= entityAPI %>s/:id} : delete the "id" <%= objectName %>.
+     *
+     * @param id the id of the <%= objectName %> to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @DeleteMapping("/<%= entityAPI %>s/{id}")
+    public ResponseEntity<Void> delete<%= entity %>(@PathVariable Long id) {
+        log.debug("REST request to delete <%= objectName %> : {}", id);
+        <%= objectName %>Service.delete(id);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+}

@@ -1,0 +1,12 @@
+package <%= package %>.repository;
+
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+import <%= package %>.domain.<%= entity %>;
+
+/**
+ * Spring Data SQL repository for the Notification entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface <%= entity %>Repository extends JpaRepository<<%= entity %>, Long> {}

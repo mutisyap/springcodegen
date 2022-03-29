@@ -1,0 +1,73 @@
+package <%= package %>.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import <%= package %>.domain.<%= entity %>;
+import <%= package %>.repository.<%= entity %>Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Service Implementation for managing {@link <%= entity %>}.
+ */
+@Service
+@Transactional
+public class <%= entity %>Service {
+
+    private final Logger log = LoggerFactory.getLogger(<%= entity %>Service.class);
+
+    private final <%= entity %>Repository <%= objectName %>Repository;
+
+
+    public <%= entity %>Service(<%= entity %>Repository <%= objectName %>Repository) {
+        this.<%= objectName %>Repository = <%= objectName %>Repository;
+    }
+
+    /**
+     * Save a <%= objectName %>.
+     *
+     * @param <%= objectName %> the <%= objectName %> to save.
+     * @return the persisted <%= objectName %>.
+     */
+    public <%= entity %> save(<%= entity %> <%= objectName %>) {
+        log.debug("Request to save <%= objectName %> : {}", <%= objectName %>);
+        return <%= objectName %>Repository.save(<%= objectName %>);
+    }
+
+
+    /**
+     * Get all the <%= objectName %>s.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<<%= entity %>> findAll() {
+        log.debug("Request to get all <%= objectName %>s");
+        return <%= objectName %>Repository.findAll();
+    }
+
+    /**
+     * Get one <%= objectName %> by id.
+     *
+     * @param id the id of the <%= objectName %>.
+     * @return the <%= objectName %>.
+     */
+    @Transactional(readOnly = true)
+    public Optional<<%= entity %>> findOne(Long id) {
+        log.debug("Request to get <%= objectName %> : {}", id);
+        return <%= objectName %>Repository.findById(id);
+    }
+
+    /**
+     * Delete the <%= objectName %> by id.
+     *
+     * @param id the id of the <%= objectName %>.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete <%= objectName %> : {}", id);
+        <%= objectName %>Repository.deleteById(id);
+    }
+}
