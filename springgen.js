@@ -11,6 +11,7 @@ const main = () => {
     // extract values
     const package = argv._[0];
     const entity = argv._[1];
+    const entity_json_path = argv._[2];
 
     if (!package || !entity) {
         console.error('package and entity are required. e.g tech.meliora.test EntityName');
@@ -25,17 +26,32 @@ const main = () => {
         day: "2-digit", hour: "2-digit", minute: "2-digit",
         second: "2-digit"
     };
-    const changeLogId = `${dateNow.getFullYear()}${('0'+(dateNow.getMonth() + 1)).slice(-2)}${('0'+dateNow.getDate()).slice(-2)}${('0'+dateNow.getHours()).slice(-2)}${('0'+dateNow.getMinutes()).slice(-2)}${('0'+dateNow.getSeconds()).slice(-2)}`
+    const changeLogId = `${dateNow.getFullYear()}${('0' + (dateNow.getMonth() + 1)).slice(-2)}${('0' + dateNow.getDate()).slice(-2)}${('0' + dateNow.getHours()).slice(-2)}${('0' + dateNow.getMinutes()).slice(-2)}${('0' + dateNow.getSeconds()).slice(-2)}`
 
     // const changeLogId = dateNow.toLocaleTimeString('en-us', dateFormat);
-    
+
+    var objectFields;
+    console.log('entity_json_path : ', entity_json_path);
+
+    if (entity_json_path) {
+        objectFields = JSON.parse(fs.readFileSync(entity_json_path));
+    }
+
+    objectFields = setFieldColumns(objectFields);
+
+
+    console.log('objectFields : ', objectFields);
+    // return;
+
+
 
     const data = {
         package,
         entity,
         objectName,
         entityAPI,
-        changeLogId
+        changeLogId,
+        objectFields
     };
 
     const options = {};
@@ -45,10 +61,12 @@ const main = () => {
     const domainTemplateFilename = path.join(__dirname, "./templates/domain.java.ejs")
     render(domainTemplateFilename, data, options);
 
+    
+
     // render repo
-    console.log('\n\nRepo\n--------------------:');
-    const repoTemplateFilename = path.join(__dirname, "./templates/jparepo.java.ejs")
-    render(repoTemplateFilename, data, options);
+    // console.log('\n\nRepo\n--------------------:');
+    // const repoTemplateFilename = path.join(__dirname, "./templates/jparepo.java.ejs")
+    // render(repoTemplateFilename, data, options);
 
     // render liquibase
     console.log('\n\Liquibase Changelog:\n--------------------');
@@ -76,6 +94,15 @@ function render(templateFilename, data, options) {
 
         console.log(str);
     });
+}
+
+
+function setFieldColumns(objectFields){
+    objectFields.forEach(objectField => {
+        objectField.column = objectField.field.replace(/([A-Z])/g, '_$1').trim().toLowerCase();
+    });
+
+    return objectFields;
 }
 
 main();
