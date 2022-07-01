@@ -1,20 +1,17 @@
-package <%= package %>.domain;
+package <%= package %>.service.dto;
 
 <% if (useLombok) {%>import lombok.Data;<% } %>
 import javax.persistence.*;
 import java.io.Serializable;
 
 <% if (useLombok) {%>@Data<% } %>
-@Entity
-@Table(name = "tbl_<%= entityAPI %>s")
-public class <%= entity %> implements Serializable {
+public class <%= entity %>DTO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     <% for(var i=0; i<objectFields.length; i++) {%>
-    @Column(name = "<%= objectFields[i].column %>")
     private <%= objectFields[i].type %> <%= objectFields[i].field %>;
     <% } %>
     <% if (!useLombok) {%>
@@ -38,7 +35,7 @@ public class <%= entity %> implements Serializable {
 
     @Override
     public String toString() {
-        return "<%= entity %>{" +
+        return "<%= entity %>DTO{" +
                 "id=" + id +
                 <% for(var i=0; i<objectFields.length; i++) {%>
                 ", <%= objectFields[i].field %>='" + <%= objectFields[i].field %> + '\'' +

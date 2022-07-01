@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import <%= package %>.domain.<%= entity %>;
+<% if (useDTO) {%>import <%= package %>.service.dto.<%= entity %>DTO;<% } %>
 import <%= package %>.service.<%= entity %>Service;
 
 import javax.validation.Valid;
@@ -30,24 +31,24 @@ public class <%= entity %>Resource {
     }
 
     @PostMapping("/<%= entityAPI %>s")
-    public ResponseEntity<<%= entity %>> create<%= entity %>(@Valid @RequestBody <%= entity %> <%= objectName %>)
+    public ResponseEntity<<%= entity %>DTO> create<%= entity %>(@Valid @RequestBody <%= entity %>DTO <%= objectName %>Dto)
             throws URISyntaxException {
-        log.debug("REST request to save <%= objectName %> : {}", <%= objectName %>);
+        log.debug("REST request to save <%= objectName %> : {}", <%= objectName %>Dto);
 
-        <%= entity %> result = <%= objectName %>Service.save(<%= objectName %>);
+        <%= entity %>DTO result = <%= objectName %>Service.save(<%= objectName %>Dto);
         return ResponseEntity
                 .created(new URI("/api/<%= entityAPI %>s/" + result.getId()))
                 .body(result);
     }
 
     @PutMapping("/<%= entityAPI %>s/{id}")
-    public ResponseEntity<<%= entity %>> update<%= entity %>(
+    public ResponseEntity<<%= entity %>DTO> update<%= entity %>(
             @PathVariable(value = "id", required = false) final Long id,
-            @Valid @RequestBody <%= entity %> <%= objectName %>
+            @Valid @RequestBody <%= entity %>DTO <%= objectName %>Dto
     ) throws URISyntaxException {
-        log.debug("REST request to update <%= objectName %> : {}, {}", id, <%= objectName %>);
+        log.debug("REST request to update <%= objectName %> : {}, {}", id, <%= objectName %>Dto);
 
-        <%= entity %> result = <%= objectName %>Service.save(<%= objectName %>);
+        <%= entity %>DTO result = <%= objectName %>Service.save(<%= objectName %>Dto);
         return ResponseEntity
                 .ok()
                 .body(result);
@@ -59,7 +60,7 @@ public class <%= entity %>Resource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= objectName %> in body.
      */
     @GetMapping("/<%= entityAPI %>s")
-    public List<<%= entity %>> getAll<%= entity %>s() {
+    public List<<%= entity %>DTO> getAll<%= entity %>s() {
         log.debug("REST request to get all <%= entity %>s");
         return <%= objectName %>Service.findAll();
     }
@@ -71,9 +72,9 @@ public class <%= entity %>Resource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= objectName %>, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/<%= entityAPI %>s/{id}")
-    public ResponseEntity<<%= entity %>> get<%= entity %>(@PathVariable Long id) {
+    public ResponseEntity<<%= entity %>DTO> get<%= entity %>(@PathVariable Long id) {
         log.debug("REST request to get <%= objectName %> : {}", id);
-        Optional<<%= entity %>> <%= objectName %>Optional = <%= objectName %>Service.findOne(id);
+        Optional<<%= entity %>DTO> <%= objectName %>Optional = <%= objectName %>Service.findOne(id);
         return <%= objectName %>Optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 

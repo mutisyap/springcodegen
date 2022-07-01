@@ -1,0 +1,11 @@
+package <%= package %>.service.mapper;
+
+import org.mapstruct.*;
+import <%= package %>.domain.<%= entity %>;
+import <%= package %>.service.dto.<%= entity %>DTO;
+
+/**
+ * Mapper for the entity {@link <%= entity %>} and its DTO {@link <%= entity %>DTO}.
+ */
+@Mapper(componentModel = "spring", uses = {})
+public interface <%= entity %>Mapper extends EntityMapper<<%= entity %>DTO, <%= entity %>> {}

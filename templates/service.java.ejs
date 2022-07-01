@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+<% if (useDTO) {%>
+import <%= package %>.service.dto.<%= entity %>DTO;
+import <%= package %>.service.mapper.<%= entity %>Mapper;
+<% } %>
 import <%= package %>.domain.<%= entity %>;
 import <%= package %>.repository.<%= entity %>Repository;
 
@@ -21,17 +25,60 @@ public class <%= entity %>Service {
 
     private final <%= entity %>Repository <%= objectName %>Repository;
 
+    <% if (useDTO) {%>private final <%= entity %>Mapper <%= objectName %>Mapper;<% } %>
 
-    public <%= entity %>Service(<%= entity %>Repository <%= objectName %>Repository) {
+    public <%= entity %>Service(<%= entity %>Repository <%= objectName %>Repository<% if (useDTO) {%>, <%= entity %>Mapper <%= objectName %>Mapper <% }%>) {
         this.<%= objectName %>Repository = <%= objectName %>Repository;
+        <% if (useDTO) {%>this.<%= objectName %>Mapper = <%= objectName %>Mapper;<% } %>
+    }
+
+    <% if (useDTO) {%>
+
+    /**
+        * Save a <%= objectName %>Dto.
+        *
+        * @param <%= objectName %>Dto the <%= objectName %>Dto to save.
+        * @return the persisted <%= objectName %>Dto.
+    */
+    
+    public <%= entity %>DTO save(<%= entity %>DTO <%= objectName %>Dto) {
+        log.debug("Request to save <%= objectName %> : {}", <%= objectName %>Dto);
+
+        <%= entity %> <%= objectName %>  = <%= objectName %>Mapper.toEntity(<%= objectName %>Dto);
+
+        return <%= objectName %>Mapper.toDto(<%= objectName %>Repository.save(<%= objectName %>));
     }
 
     /**
-     * Save a <%= objectName %>.
+     * Get all the <%= objectName %>s.
      *
-     * @param <%= objectName %> the <%= objectName %> to save.
-     * @return the persisted <%= objectName %>.
+     * @return the list of entities.
      */
+    @Transactional(readOnly = true)
+    public List<<%= entity %>DTO> findAll() {
+        log.debug("Request to get all <%= objectName %>s");
+        return <%= objectName %>Mapper.toDto(<%= objectName %>Repository.findAll());
+    }
+
+    /**
+     * Get one <%= objectName %>DTO by id.
+     *
+     * @param id the id of the <%= objectName %>DTO.
+     * @return the <%= objectName %>DTO.
+     */
+    @Transactional(readOnly = true)
+    public Optional<<%= entity %>DTO> findOne(Long id) {
+        log.debug("Request to get <%= objectName %> : {}", id);
+        return <%= objectName %>Repository.findById(id).map(<%= objectName %>Mapper::toDto;
+    }
+
+    <% } else{ %>
+    /**
+    * Save a <%= objectName %>.
+    *
+    * @param <%= objectName %> the <%= objectName %> to save.
+    * @return the persisted <%= objectName %>.
+    */
     public <%= entity %> save(<%= entity %> <%= objectName %>) {
         log.debug("Request to save <%= objectName %> : {}", <%= objectName %>);
         return <%= objectName %>Repository.save(<%= objectName %>);
@@ -39,10 +86,10 @@ public class <%= entity %>Service {
 
 
     /**
-     * Get all the <%= objectName %>s.
-     *
-     * @return the list of entities.
-     */
+    * Get all the <%= objectName %>s.
+    *
+    * @return the list of entities.
+    */
     @Transactional(readOnly = true)
     public List<<%= entity %>> findAll() {
         log.debug("Request to get all <%= objectName %>s");
@@ -60,6 +107,8 @@ public class <%= entity %>Service {
         log.debug("Request to get <%= objectName %> : {}", id);
         return <%= objectName %>Repository.findById(id);
     }
+    <% } %>
+
 
     /**
      * Delete the <%= objectName %> by id.

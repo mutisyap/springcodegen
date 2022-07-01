@@ -10,11 +10,42 @@
 ### Install packages (ejs, fs-extra and yargs-parser)
 > npm install
 
-### Generate a sample entity
-> node springgen package entity
+### Optional: Create entity JSON file. e.g /home/user/objects/user.json
+```json
+[
+    {
+        "field": "name",
+        "type": "Integer",
+        "dbType": "int(4)"
+    },
+    {
+        "field": "createdOn",
+        "type": "String",
+        "dbType": "varchar(35)"
+    },
+    {
+        "field": "createdBy",
+        "type": "String",
+        "dbType": "varchar(35)"
+    },
+    {
+        "field": "lastUpdatedOn",
+        "type": "String",
+        "dbType": "varchar(35)"
+    },
+    {
+        "field": "lastUpdatedBy",
+        "type": "String",
+        "dbType": "varchar(35)"
+    }
+]
+```
+
+### Generate a sample empty
+> node springgen package entity absoluteFilName(optional)
 
 ### e.g
-> node springgen io.mutisyap.sample SampleEntity
+> node springgen io.mutisyap.sample SampleEntity /home/user/objects/user.json
 
 
 ## What you will get:
