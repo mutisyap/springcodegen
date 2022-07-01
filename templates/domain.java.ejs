@@ -13,12 +13,9 @@ public class <%= entity %> implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String createdOn;
+    <% for(var i=0; i<objectFields.length; i++) {%>
+    private <%= objectFields[i].type %> <%= objectFields[i].field %>;
 
-    private String createdBy;
-
-    private String lastUpdatedOn;
-
-    private String lastUpdatedBy;
+    <% } %>
 
 }
